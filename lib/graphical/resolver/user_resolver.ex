@@ -11,4 +11,14 @@ defmodule Graphical.UserResolver do
             user -> {:ok, user}
         end
     end
+
+    def update(%{id: id, post: user_params}, _info) do
+        Graphical.Accounts.get_user!(id)
+        |> Accounts.update_user(user_params)
+    end
+
+    def delete(%{id: id}, _info) do
+        Graphical.Accounts.get_user!(id)
+        |> Accounts.delete_user
+    end
 end
