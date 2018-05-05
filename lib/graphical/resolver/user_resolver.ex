@@ -21,4 +21,13 @@ defmodule Graphical.UserResolver do
         Graphical.Accounts.get_user!(id)
         |> Accounts.delete_user
     end
+
+    def login(params, _info) do
+        with {:ok, user} <- Graphical.Accounts.User.authenticate(params),
+             {:ok, jwt, _} <- Graphical.Guardian.encode_and_sign(user),
+             {:ok, _} <- Graphical.Accounts.store_user(user, jwt)
+        do
+            {:ok, %{token: jwt}}
+        end
+    end
 end
